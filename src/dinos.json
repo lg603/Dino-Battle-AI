@@ -1,0 +1,244 @@
+{
+    "dinosaurs": [
+        {
+            "name": "Tyrannosaurus",
+            "type": "Lava",
+            "stats": {
+                "hp": 1400,
+                "attack": 95,
+                "defense": 80,
+                "stamina": 80,
+                "stamina_recharge": 20,
+                "speed": 50
+            }
+        },
+        {
+            "name": "Spinosaurus",
+            "type": "Water",
+            "stats": {
+                "hp": 1300,
+                "attack": 90,
+                "defense": 85,
+                "stamina": 60,
+                "stamina_recharge": 20,
+                "speed": 55
+            }
+        },
+        {
+            "name": "Pterodactyl",
+            "type": "Air",
+            "stats": {
+                "hp": 800,
+                "attack": 70,
+                "defense": 65,
+                "stamina": 80,
+                "stamina_recharge": 20,
+                "speed": 95
+            }
+        },
+        {
+            "name": "Stegosaurus",
+            "type": "Earth",
+            "stats": {
+                "hp": 1200,
+                "attack": 60,
+                "defense": 90,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 30
+            }
+        },
+        {
+            "name": "Ankylosaurus",
+            "type": "Metal",
+            "stats": {
+                "hp": 1100,
+                "attack": 50,
+                "defense": 95,
+                "stamina": 40,
+                "stamina_recharge": 10,
+                "speed": 25
+            }
+        },
+        {
+            "name": "Velociraptor",
+            "type": "Jungle",
+            "stats": {
+                "hp": 600,
+                "attack": 85,
+                "defense": 60,
+                "stamina": 40,
+                "stamina_recharge": 20,
+                "speed": 100
+            }
+        },
+        {
+            "name": "Brachiosaurus",
+            "type": "Thunder",
+            "stats": {
+                "hp": 1500,
+                "attack": 70,
+                "defense": 75,
+                "stamina": 80,
+                "stamina_recharge": 20,
+                "speed": 40
+            }
+        },
+        {
+            "name": "Triceratops",
+            "type": "Ice",
+            "stats": {
+                "hp": 1000,
+                "attack": 65,
+                "defense": 85,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 35
+            }
+        },
+        {
+            "name": "Diplodocus",
+            "type": "Mystic",
+            "stats": {
+                "hp": 900,
+                "attack": 55,
+                "defense": 70,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 45
+            }
+        },
+        {
+            "name": "Allosaurus",
+            "type": "Fossil",
+            "stats": {
+                "hp": 850,
+                "attack": 80,
+                "defense": 65,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 60
+            }
+        },
+        {
+            "name": "Carnotaurus",
+            "type": "Lava",
+            "stats": {
+                "hp": 700,
+                "attack": 90,
+                "defense": 70,
+                "stamina": 40,
+                "stamina_recharge": 10,
+                "speed": 65
+            }
+        },
+        {
+            "name": "Mosasaurus",
+            "type": "Water",
+            "stats": {
+                "hp": 1350,
+                "attack": 85,
+                "defense": 80,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 45
+            }
+        },
+        {
+            "name": "Quetzalcoatlus",
+            "type": "Air",
+            "stats": {
+                "hp": 750,
+                "attack": 65,
+                "defense": 60,
+                "stamina": 80,
+                "stamina_recharge": 20,
+                "speed": 85
+            }
+        },
+        {
+            "name": "Iguanodon",
+            "type": "Earth",
+            "stats": {
+                "hp": 950,
+                "attack": 60,
+                "defense": 85,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 40
+            }
+        },
+        {
+            "name": "Parasaurolophus",
+            "type": "Metal",
+            "stats": {
+                "hp": 1050,
+                "attack": 55,
+                "defense": 90,
+                "stamina": 40,
+                "stamina_recharge": 10,
+                "speed": 50
+            }
+        },
+        {
+            "name": "Compsognathus",
+            "type": "Jungle",
+            "stats": {
+                "hp": 300,
+                "attack": 80,
+                "defense": 40,
+                "stamina": 20,
+                "stamina_recharge": 10,
+                "speed": 90
+            }
+        },
+        {
+            "name": "Apatosaurus",
+            "type": "Thunder",
+            "stats": {
+                "hp": 1450,
+                "attack": 75,
+                "defense": 80,
+                "stamina": 80,
+                "stamina_recharge": 20,
+                "speed": 35
+            }
+        },
+        {
+            "name": "Kentrosaurus",
+            "type": "Ice",
+            "stats": {
+                "hp": 950,
+                "attack": 70,
+                "defense": 90,
+                "stamina": 40,
+                "stamina_recharge": 10,
+                "speed": 30
+            }
+        },
+        {
+            "name": "Therizinosaurus",
+            "type": "Mystic",
+            "stats": {
+                "hp": 800,
+                "attack": 60,
+                "defense": 75,
+                "stamina": 60,
+                "stamina_recharge": 15,
+                "speed": 55
+            }
+        },
+        {
+            "name": "Pachycephalosaurus",
+            "type": "Fossil",
+            "stats": {
+                "hp": 500,
+                "attack": 75,
+                "defense": 80,
+                "stamina": 40,
+                "stamina_recharge": 10,
+                "speed": 70
+            }
+        }
+    ]
+}
