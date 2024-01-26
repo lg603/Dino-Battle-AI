@@ -1,6 +1,7 @@
 {
     "dinosaurs": [
         {
+            "id": 1,
             "name": "Tyrannosaurus",
             "type": "Lava",
             "stats": {
@@ -13,6 +14,7 @@
             }
         },
         {
+            "id": 2,
             "name": "Spinosaurus",
             "type": "Water",
             "stats": {
@@ -25,6 +27,7 @@
             }
         },
         {
+            "id": 3,
             "name": "Pterodactyl",
             "type": "Air",
             "stats": {
@@ -37,6 +40,7 @@
             }
         },
         {
+            "id": 4,
             "name": "Stegosaurus",
             "type": "Earth",
             "stats": {
@@ -49,6 +53,7 @@
             }
         },
         {
+            "id": 5,
             "name": "Ankylosaurus",
             "type": "Metal",
             "stats": {
@@ -61,6 +66,7 @@
             }
         },
         {
+            "id": 6,
             "name": "Velociraptor",
             "type": "Jungle",
             "stats": {
@@ -73,6 +79,7 @@
             }
         },
         {
+            "id": 7,
             "name": "Brachiosaurus",
             "type": "Thunder",
             "stats": {
@@ -85,6 +92,7 @@
             }
         },
         {
+            "id": 8,
             "name": "Triceratops",
             "type": "Ice",
             "stats": {
@@ -97,6 +105,7 @@
             }
         },
         {
+            "id": 9,
             "name": "Diplodocus",
             "type": "Mystic",
             "stats": {
@@ -109,6 +118,7 @@
             }
         },
         {
+            "id": 10,
             "name": "Allosaurus",
             "type": "Fossil",
             "stats": {
@@ -121,6 +131,7 @@
             }
         },
         {
+            "id": 11,
             "name": "Carnotaurus",
             "type": "Lava",
             "stats": {
@@ -133,6 +144,7 @@
             }
         },
         {
+            "id": 12,
             "name": "Mosasaurus",
             "type": "Water",
             "stats": {
@@ -145,6 +157,7 @@
             }
         },
         {
+            "id": 13,
             "name": "Quetzalcoatlus",
             "type": "Air",
             "stats": {
@@ -157,6 +170,7 @@
             }
         },
         {
+            "id": 14,
             "name": "Iguanodon",
             "type": "Earth",
             "stats": {
@@ -169,6 +183,7 @@
             }
         },
         {
+            "id": 15,
             "name": "Parasaurolophus",
             "type": "Metal",
             "stats": {
@@ -181,6 +196,7 @@
             }
         },
         {
+            "id": 16,
             "name": "Compsognathus",
             "type": "Jungle",
             "stats": {
@@ -193,6 +209,7 @@
             }
         },
         {
+            "id": 17,
             "name": "Apatosaurus",
             "type": "Thunder",
             "stats": {
@@ -205,6 +222,7 @@
             }
         },
         {
+            "id": 18,
             "name": "Kentrosaurus",
             "type": "Ice",
             "stats": {
@@ -217,6 +235,7 @@
             }
         },
         {
+            "id": 19,
             "name": "Therizinosaurus",
             "type": "Mystic",
             "stats": {
@@ -229,6 +248,7 @@
             }
         },
         {
+            "id": 20,
             "name": "Pachycephalosaurus",
             "type": "Fossil",
             "stats": {
