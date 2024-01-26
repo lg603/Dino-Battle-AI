@@ -5,28 +5,6 @@ import random
 import json
 
 
-def perform_battle_turn(attacker, defender, move):
-    # Calculate the base damage of the move
-    base_damage = move.power  # You will need more complex calculations based on stats, etc.
-
-    # Get the type effectiveness
-    effectiveness = defender.type_effectiveness(move.type)
-
-    # Calculate the final damage
-    final_damage = base_damage * effectiveness
-
-    # Apply the damage to the defender
-    defender.hp -= final_damage
-
-    # Print out what happened
-    print(
-        f"{attacker.name} used {move.name} on {defender.name}! It's {effectiveness}x effective! {defender.name} "
-        f"took {final_damage} damage!")
-
-    # Apply additional effects from the move
-    move.apply(defender)
-
-
 def load_dinos_from_json(file_path, dino_id):
     with open(file_path, 'r', encoding='utf-8') as file:
         dino_data = json.load(file)
@@ -100,7 +78,7 @@ class Battle:
     path_to_dinodex = "dinos.json"
     path_to_moves = "moves.json"
 
-    def __init__(self, min_id=1, max_id=20):
+    def __init__(self, min_id=1, max_id=20, debug=1):
         self.team1 = []
         self.team2 = []
         self.min_id = min_id
@@ -110,6 +88,7 @@ class Battle:
         # Run setup function
         self.create_teams()
         self.round_number = 1
+        self.debug = debug
 
     # CREATING ROSTER FOR THE BATTLE ===================================================================================
     def create_teams(self, team_size=3):
@@ -122,6 +101,7 @@ class Battle:
             if random_id not in selected_ids:
                 dino = load_dinos_from_json(self.path_to_dinodex, random_id)
                 if dino:
+                    dino.team = 1
                     team1.append(dino)
                     selected_ids.add(random_id)
 
@@ -130,6 +110,7 @@ class Battle:
             if random_id not in selected_ids:
                 dino = load_dinos_from_json(self.path_to_dinodex, random_id)
                 if dino:
+                    dino.team = 2
                     team2.append(dino)
                     selected_ids.add(random_id)
 
@@ -143,6 +124,17 @@ class Battle:
         print("\nTeam 2:")
         for dino in self.team2:
             print(f"- {dino}")
+
+    def print_status_chart(self):
+        if self.debug:
+            print("\nCurrent Status:")
+            print("Team 1:")
+            for dino in self.team1:
+                print(f"- {dino}")
+            print("\nTeam 2:")
+            for dino in self.team2:
+                print(f"- {dino}")
+            print("\n")
 
     # ADD MOVES TO DINOS ON EACH TEAM, BASED ON STAMINA CAP ============================================================
     def assign_moves_to_teams(self):
@@ -189,13 +181,16 @@ class Battle:
             defender.hp = max(defender.hp - final_damage, 0)
 
             # Print out what happened
-            print(
-                f"{attacker.name} used {move.name} on {defender.name}! It's {effectiveness}x effective! {defender.name}"
-                f" took {final_damage} damage! Remaining HP: {defender.hp}")
+            if self.debug:
+                # Print out what happened
+                print(
+                    f"{attacker.name} (Team {attacker.team}) used {move.name} on {defender.name} "
+                    f"(Team {defender.team})! It's {effectiveness}x effective! {defender.name} "
+                    f"took {final_damage} damage! Remaining HP: {defender.hp}")
 
-            # Check if the defender is defeated
-            if defender.hp == 0:
-                print(f"{defender.name} has been defeated!")
+                # Check if the defender is defeated
+                if defender.hp == 0:
+                    print(f"{defender.name} (Team {defender.team}) has been defeated!")
 
         elif move.move_type in [2, 3]:  # Stat boost/debuff move
             # Apply stat changes to the defender
@@ -203,15 +198,17 @@ class Battle:
                 defender.change_stat(stat, multiplier)
                 change_type = "Boosted" if multiplier > 1 else "Reduced"
                 change_amount = f"{multiplier}x" if multiplier > 1 else f"{multiplier * 100}%"
-                print(
-                    f"{attacker.name} used {move.name} on {defender.name}! {change_type} {defender.name}'s {stat}"
-                    f" stat by {change_amount}.")
+                if self.debug:
+                    print(
+                        f"{attacker.name} used {move.name} on {defender.name}! {change_type} {defender.name}'s {stat}"
+                        f" stat by {change_amount}.")
 
         # Recharge attacker's stamina
         attacker.recharge_stamina()
 
     def battle_sequence(self):
-        print("\n============== BEGIN BATTLE ==============\n")
+        if self.debug:
+            print("\n============== BEGIN BATTLE ==============\n")
         # Assign moves to teams
         self.assign_moves_to_teams()
 
@@ -221,7 +218,8 @@ class Battle:
         # Continue battle until one team is out of dinos
         while any(d.hp > 0 for d in self.team1) and any(d.hp > 0 for d in self.team2):
             # Print the round number
-            print(f"============== ROUND {self.round_number} ==============")
+            if self.debug:
+                print(f"============== ROUND {self.round_number} ==============")
 
             # Sort dinos by speed, descending
             all_dinos.sort(key=lambda d: d.speed, reverse=True)
@@ -237,11 +235,11 @@ class Battle:
                     # Decide action based on the number of available moves
                     if len(available_moves) == 0:
                         # No moves available, dino must rest
-                        dino.rest()
+                        dino.rest(self.debug)
                         continue  # Skip the rest of the loop for this dino
                     elif len(available_moves) == 1 and random.random() < 0.5:
                         # Only one move available, 50% chance to rest
-                        dino.rest()
+                        dino.rest(self.debug)
                         continue  # Skip the rest of the loop for this dino
                     else:
                         # Select a random move from the available moves
@@ -271,7 +269,11 @@ class Battle:
                     if defender:
                         self.perform_battle_turn(dino, defender, move)
                     else:
-                        print(f"No valid target found for {dino.name}'s move {move.name}")
+                        if self.debug:
+                            print(f"No valid target found for {dino.name}'s move {move.name}")
+
+            # Print status chart after each turn
+            self.print_status_chart()
 
             # Increment the round number after each dinosaur has had their turn
             self.round_number += 1
@@ -282,7 +284,7 @@ class Battle:
 
 
 if __name__ == "__main__":
-    battle = Battle()
+    battle = Battle(debug=0)
     battle.assign_moves_to_teams()  # Assign moves to dinos in both teams
-    battle.print_teams()
+    # battle.print_teams()
     battle.battle_sequence()

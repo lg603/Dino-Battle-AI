@@ -19,10 +19,13 @@ class Dino:
         self.stamina_recharge = stamina_recharge
         self.speed = speed
         self.moves = []
+        self.team = 0  # Default assignment, no team yet
 
     def __str__(self):
-        dino_info = (f"{self.name} ({self.dino_type}) - HP: {self.hp}, Attack: {self.attack}, Defense: {self.defense},"
-                     f" Stamina: {self.curr_stamina}, Stamina Recharge: {self.stamina_recharge}, Speed: {self.speed}")
+        status = "KO" if self.hp <= 0 else "Active"
+        dino_info = (f"{self.name} (Team {self.team}) - Type: {self.dino_type}, HP: {self.hp}, Attack: {self.attack}, "
+                     f"Defense: {self.defense}, Stamina: {self.curr_stamina}, "
+                     f"Stamina Recharge: {self.stamina_recharge}, Speed: {self.speed}, Status: {status}")
 
         # Add moves to the string if the dinosaur has any
         if self.moves:
@@ -51,6 +54,7 @@ class Dino:
     def recharge_stamina(self):
         self.curr_stamina += self.stamina_recharge
 
-    def rest(self):
-        print(f"{self.name} is resting this turn and refilling its stamina.")
+    def rest(self, debug):
+        if debug != 0:
+            print(f"{self.name} is resting this turn and refilling its stamina.")
         self.curr_stamina = self.max_stamina
