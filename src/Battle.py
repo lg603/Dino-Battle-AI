@@ -83,10 +83,10 @@ class Battle:
         'Water': {'Lava': 2, 'Air': 1.0, 'Earth': 0.5, 'Metal': 1.0, 'Thunder': 1.0, 'Jungle': 2, 'Ice': 1.0,
                   'Mystic': 2, 'Fossil': 1.0},
 
-        'Air': {'Lava': 1.0, 'Water': 1.0, 'Earth': 0, 'Metal': 1.0, 'Jungle': 2, 'Thunder': 0.5, 'Ice': 2,
+        'Air': {'Lava': 1.0, 'Water': 1.0, 'Earth': 0.5, 'Metal': 1.0, 'Jungle': 2, 'Thunder': 0.5, 'Ice': 2,
                 'Mystic': 2, 'Fossil': 1.0},
 
-        'Earth': {'Lava': 0.5, 'Water': 2, 'Air': 2, 'Metal': 1.0, 'Jungle': 0.5, 'Thunder': 0, 'Ice': 1.0,
+        'Earth': {'Lava': 0.5, 'Water': 2, 'Air': 2, 'Metal': 1.0, 'Jungle': 0.5, 'Thunder': 0.5, 'Ice': 1.0,
                   'Mystic': 1.0, 'Fossil': 2},
 
         'Metal': {'Lava': 2, 'Water': 1.0, 'Air': 1.0, 'Earth': 1.0, 'Jungle': 0.5, 'Thunder': 2, 'Ice': 0.5,
@@ -116,6 +116,7 @@ class Battle:
         self.team2 = []
         self.min_id = min_id
         self.max_id = max_id
+        self.MAX_ROUNDS = 200
         self.num_dinos = 6
 
         # Run setup function
@@ -162,8 +163,11 @@ class Battle:
             dino.reset_stats()
             if dino.name not in self.overall_statistics:
                 self.overall_statistics[dino.name] = {
-                    'appearances': 0, 'wins': 0, 'losses': 0, 'survived': 0, 'died': 0, 'rests': 0, 'final_hp': [],
-                    'rounds_survived': []
+                    'appearances': 0, 'wins': 0, 'losses': 0, 'survived': 0, 'died': 0, 'rests': 0,
+                    'final_hp_sum': 0, 'final_hp_count': 0, 'final_hp_min': float('inf'), 'final_hp_max': 0,
+                    'rounds_survived_sum': 0, 'rounds_survived_count': 0, 'rounds_survived_min': float('inf'),
+                    'rounds_survived_max': 0,
+                    'draws': 0
                 }
             self.overall_statistics[dino.name]['appearances'] += 1
 
@@ -201,38 +205,59 @@ class Battle:
 
     # BATTLE SEQUENCE ==================================================================================================
     def update_statistics_after_battle(self):
-        winning_team = self.team1 if any(d.hp > 0 for d in self.team1) else self.team2
-        losing_team = self.team2 if winning_team == self.team1 else self.team1
-
-        for dino in self.team1 + self.team2:
-            dino_stats = self.overall_statistics.setdefault(dino.name, {
-                'appearances': 0, 'wins': 0, 'losses': 0, 'survived': 0, 'died': 0, 'rests': 0, 'final_hp': [],
-                'rounds_survived': []
-            })
-
-            dino_stats['appearances'] += 1
-            dino_stats['final_hp'].append(dino.hp)
-            dino_stats['rounds_survived'].append(self.round_number if dino.hp > 0 else self.round_number - 1)
-
-            if dino in winning_team:
-                dino_stats['wins'] += 1
+        # print(self.round_number)
+        if self.round_number > self.MAX_ROUNDS:  # Match hit max number of rounds
+            for dino in self.team1 + self.team2:
+                self.overall_statistics[dino.name]['draws'] += 1
+        else:  # Battle finished normally
+            winning_team = self.team1 if any(d.hp > 0 for d in self.team1) else self.team2
+            for dino in winning_team:
                 self.type_wins[dino.dino_type] = self.type_wins.get(dino.dino_type, 0) + 1
-            else:
-                dino_stats['losses'] += 1
 
-            if dino.hp > 0:
-                dino_stats['survived'] += 1
-            else:
-                dino_stats['died'] += 1
+            for dino in self.team1 + self.team2:
+                dino_stats = self.overall_statistics.setdefault(dino.name, {
+                    'appearances': 0, 'wins': 0, 'losses': 0, 'draws': 0, 'survived': 0, 'died': 0, 'rests': 0,
+                    'final_hp_sum': 0, 'final_hp_min': float('inf'), 'final_hp_max': 0, 'final_hp_count': 0,
+                    'rounds_survived_sum': 0, 'rounds_survived_min': float('inf'), 'rounds_survived_max': 0,
+                    'rounds_survived_count': 0
+                })
 
-        self.total_battles += 1
-        self.total_rounds += self.round_number
+                dino_stats['appearances'] += 1
 
-        # Update average statistics
-        for dino_name, stats in self.dino_statistics.items():
-            stats['win_loss_ratio'] = stats['wins'] / stats['losses'] if stats['losses'] > 0 else float('inf')
-            stats['avg_rounds_survived'] = sum(stats['rounds_survived']) / len(stats['rounds_survived'])
-            stats['avg_final_hp'] = sum(stats['final_hp']) / len(stats['final_hp'])
+                # Update final HP stats
+                dino_stats['final_hp_sum'] += dino.hp
+                dino_stats['final_hp_min'] = min(dino_stats['final_hp_min'], dino.hp)
+                dino_stats['final_hp_max'] = max(dino_stats['final_hp_max'], dino.hp)
+                dino_stats['final_hp_count'] += 1
+
+                # Update rounds survived stats
+                rounds_survived = self.round_number if dino.hp > 0 else self.round_number - 1
+                dino_stats['rounds_survived_sum'] += rounds_survived
+                dino_stats['rounds_survived_min'] = min(dino_stats['rounds_survived_min'], rounds_survived)
+                dino_stats['rounds_survived_max'] = max(dino_stats['rounds_survived_max'], rounds_survived)
+                dino_stats['rounds_survived_count'] += 1
+
+                if dino in winning_team:
+                    dino_stats['wins'] += 1
+                    self.type_wins[dino.dino_type] = self.type_wins.get(dino.dino_type, 0) + 1
+                else:
+                    dino_stats['losses'] += 1
+
+                if dino.hp > 0:
+                    dino_stats['survived'] += 1
+                else:
+                    dino_stats['died'] += 1
+
+                dino_stats['rests'] += dino.battle_stats['rests']
+
+            self.total_battles += 1
+            self.total_rounds += self.round_number
+
+            # Update average statistics
+            for dino_name, stats in self.dino_statistics.items():
+                stats['win_loss_ratio'] = stats['wins'] / stats['losses'] if stats['losses'] > 0 else float('inf')
+                stats['avg_rounds_survived'] = sum(stats['rounds_survived']) / len(stats['rounds_survived'])
+                stats['avg_final_hp'] = sum(stats['final_hp']) / len(stats['final_hp'])
 
     def type_effectiveness(self, attacker_type, defender_type):
         # Check if attacker_type exists in the attack_chart
@@ -256,7 +281,7 @@ class Battle:
 
         # Determine if it's a critical hit
         is_crit = random.random() <= crit_chance
-        crit_multiplier = 1.25 if is_crit else 1
+        crit_multiplier = 1.5 if is_crit else 1
 
         # Calculate final damage
         final_damage = math.floor(base_damage * crit_multiplier)
@@ -332,6 +357,16 @@ class Battle:
             if self.debug:
                 print(f"============== ROUND {self.round_number} ==============")
 
+            if self.round_number > self.MAX_ROUNDS:
+                if self.debug:
+                    print("Battle reached maximum round limit. Declaring a draw.")
+                for dino in self.team1 + self.team2:
+                    # Initialize 'draws' key if not present
+                    if 'draws' not in self.overall_statistics[dino.name]:
+                        self.overall_statistics[dino.name]['draws'] = 0
+                    self.overall_statistics[dino.name]['draws'] += 1
+                return  # End the battle
+
             # Sort dinos by speed, descending
             all_dinos.sort(key=lambda d: d.speed, reverse=True)
 
@@ -395,21 +430,3 @@ class Battle:
             winner = "Team 1" if any(d.hp > 0 for d in self.team1) else "Team 2"
             print(f"The battle is over! {winner} wins!")
 
-
-if __name__ == "__main__":
-    overall_statistics = {}  # Initialize overall statistics
-    type_wins = {}  # Initialize type wins
-
-    for i in range(100):
-        if i % 10 == 0:
-            print(f"Battle Number {i}")
-        battle = Battle(debug=0, init_overall_statistics=overall_statistics, init_type_wins=type_wins)
-        battle.assign_moves_to_teams()
-        battle.battle_sequence()
-        battle.update_statistics_after_battle()  # This method now updates overall_statistics and type_wins
-
-    # Write overall statistics to a file
-    with open('battle_statistics.json', 'w') as file:
-        json.dump(overall_statistics, file, indent=4)
-
-# TODO Fix issues with battles going on for too long. This has somethign to do with stats being reduced too far I think.

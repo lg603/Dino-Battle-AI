@@ -12,6 +12,7 @@ class Dino:
         self.stamina_recharge = stamina_recharge
         self.speed = speed
 
+        # Base Statistics
         self.base_hp = hp
         self.base_attack = attack
         self.base_defense = defense
@@ -52,7 +53,7 @@ class Dino:
             self.stamina_recharge = max(self.base_stamina_recharge * 0.5, min(math.floor(self.stamina_recharge *
                                                                                          multiplier), 1000))
         elif stat == 'speed':
-            self.speed = max(self.base_speed, min(math.floor(self.speed * multiplier), 1000))
+            self.speed = max(self.base_speed * 0.2, min(math.floor(self.speed * multiplier), 1000))
 
     def use_stamina(self, cost):
         self.curr_stamina = max(0, self.curr_stamina - cost)
