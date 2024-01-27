@@ -73,7 +73,7 @@
         {
             "name": "Mighty Roar",
             "type": 2,
-            "accuracy": 90,
+            "accuracy": 95,
             "stamina_cost": 20,
             "effect": {"attack": 1.5}
         },
@@ -87,9 +87,9 @@
         {
             "name": "Endurance Boost",
             "type": 2,
-            "accuracy": 90,
+            "accuracy": 95,
             "stamina_cost": 20,
-            "effect": {"stamina": 1.5}
+            "effect": {"max_stamina": 1.5}
         },
         {
             "name": "Rapid Recovery",
@@ -101,7 +101,7 @@
         {
             "name": "Speed Surge",
             "type": 2,
-            "accuracy": 90,
+            "accuracy": 95,
             "stamina_cost": 20,
             "effect": {"speed": 1.5}
         },
@@ -124,7 +124,7 @@
             "type": 3,
             "accuracy": 80,
             "stamina_cost": 20,
-            "effect": {"stamina": 0.5}
+            "effect": {"max_stamina": 0.5}
         },
         {
             "name": "Energy Drain",
