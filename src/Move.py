@@ -2,7 +2,8 @@ import json
 
 
 class Move:
-    def __init__(self, name, move_type, power=None, accuracy=None, stamina_cost=None, effect=None):
+    def __init__(self, move_id, name, move_type, power=None, accuracy=None, stamina_cost=None, effect=None):
+        self.id = move_id
         self.name = name
         self.move_type = move_type  # 1: Attack, 2: Stat Boost, 3: Stat Debuff
         self.power = power

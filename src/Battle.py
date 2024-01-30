@@ -29,7 +29,7 @@ def load_dinos_from_json(file_path, dino_id):
 def load_moves_from_json(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         move_data = json.load(file)
-    return [Move(move['name'], move['type'], move.get('power'), move['accuracy'], move['stamina_cost'],
+    return [Move(move['id'], move['name'], move['type'], move.get('power'), move['accuracy'], move['stamina_cost'],
                  move.get('effect')) for move in move_data['moves']]
 
 
@@ -73,6 +73,7 @@ def calculate_crit_chance(move_accuracy, attacker_speed, defender_speed):
     return crit_chance
 
 
+# ================================================= BATTLE CLASS =================================================
 class Battle:
     # A global variable containing the attack chart for move effectiveness. This will be used extensively in battle
     # calculations.
@@ -111,7 +112,8 @@ class Battle:
     path_to_dinodex = "dinos.json"
     path_to_moves = "moves.json"
 
-    def __init__(self, min_id=1, max_id=20, debug=1, init_overall_statistics=None, init_type_wins=None):
+    def __init__(self, min_id=1, max_id=20, debug=1, init_overall_statistics=None, init_type_wins=None, capture=False):
+        self.capture = capture
         self.team1 = []
         self.team2 = []
         self.min_id = min_id
@@ -127,8 +129,13 @@ class Battle:
         self.total_rounds = 0  # To track total number of rounds
         self.total_battles = 0  # To track total number of battles
 
+        # General Statistics Tracking
         self.overall_statistics = init_overall_statistics if init_overall_statistics is not None else {}
         self.type_wins = init_type_wins if init_type_wins is not None else {}
+
+        # Winner Predictions Statistics Tracking
+        self.pregame_stats = []
+        self.winner = 0
 
         self.create_teams()
 
@@ -138,7 +145,7 @@ class Battle:
         team2 = []
         selected_ids = set()
 
-        while len(team1) < team_size:
+        while len(team1) < team_size:  # Create team 1
             random_id = random.randint(self.min_id, self.max_id)
             if random_id not in selected_ids:
                 dino = load_dinos_from_json(self.path_to_dinodex, random_id)
@@ -147,7 +154,7 @@ class Battle:
                     team1.append(dino)
                     selected_ids.add(random_id)
 
-        while len(team2) < team_size:
+        while len(team2) < team_size:  # Create team 2
             random_id = random.randint(self.min_id, self.max_id)
             if random_id not in selected_ids:
                 dino = load_dinos_from_json(self.path_to_dinodex, random_id)
@@ -161,7 +168,7 @@ class Battle:
 
         for dino in self.team1 + self.team2:
             dino.reset_stats()
-            if dino.name not in self.overall_statistics:
+            if dino.name not in self.overall_statistics:  # Set default statistics to track
                 self.overall_statistics[dino.name] = {
                     'appearances': 0, 'wins': 0, 'losses': 0, 'survived': 0, 'died': 0, 'rests': 0,
                     'final_hp_sum': 0, 'final_hp_count': 0, 'final_hp_min': float('inf'), 'final_hp_max': 0,
@@ -202,6 +209,9 @@ class Battle:
         # Assign moves to each dino in team2
         for dino in self.team2:
             assign_moves_to_dino(dino, all_moves)
+
+        if self.capture:  # Capturing data before the match to use in training battle winner predictor
+            self.pregame_stats = self.get_pregame_stats()
 
     # BATTLE SEQUENCE ==================================================================================================
     def update_statistics_after_battle(self):
@@ -425,8 +435,21 @@ class Battle:
             # Increment the round number after each dinosaur has had their turn
             self.round_number += 1
 
+        self.winner = 1 if any(d.hp > 0 for d in self.team1) else 2
+
         # Determine the winner
         if self.debug == 1:
-            winner = "Team 1" if any(d.hp > 0 for d in self.team1) else "Team 2"
-            print(f"The battle is over! {winner} wins!")
+            winners = "Team 1" if any(d.hp > 0 for d in self.team1) else "Team 2"
+            print(f"The battle is over! {winners} wins!")
 
+    # Gather the stats of the dinos before the battle for predictions
+    def get_pregame_stats(self):
+        team_1_data = []
+        for dino in self.team1:
+            team_1_data += dino.get_stats()
+
+        team_2_data = []
+        for dino in self.team2:
+            team_2_data += dino.get_stats()
+
+        return team_1_data + team_2_data

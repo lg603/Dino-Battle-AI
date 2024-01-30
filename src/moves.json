@@ -1,6 +1,7 @@
 {
     "moves": [
         {
+            "id": 1,
             "name": "Flaming Tail Whip",
             "type": 1,
             "power": 120,
@@ -8,6 +9,7 @@
             "stamina_cost": 50
         },
         {
+            "id": 2,
             "name": "Aqua Strike",
             "type": 1,
             "power": 90,
@@ -15,6 +17,7 @@
             "stamina_cost": 30
         },
         {
+            "id": 3,
             "name": "Boulder Bash",
             "type": 1,
             "power": 100,
@@ -22,6 +25,7 @@
             "stamina_cost": 40
         },
         {
+            "id": 4,
             "name": "Metallic Claw",
             "type": 1,
             "power": 80,
@@ -29,6 +33,7 @@
             "stamina_cost": 20
         },
         {
+            "id": 5,
             "name": "Thunder Roar",
             "type": 1,
             "power": 150,
@@ -36,6 +41,7 @@
             "stamina_cost": 60
         },
         {
+            "id": 6,
             "name": "Tail Swipe",
             "type": 1,
             "power": 40,
@@ -43,6 +49,7 @@
             "stamina_cost": 15
         },
         {
+            "id": 7,
             "name": "Peck",
             "type": 1,
             "power": 35,
@@ -50,6 +57,7 @@
             "stamina_cost": 10
         },
         {
+            "id": 8,
             "name": "Rock Toss",
             "type": 1,
             "power": 45,
@@ -57,6 +65,7 @@
             "stamina_cost": 20
         },
         {
+            "id": 9,
             "name": "Water Splash",
             "type": 1,
             "power": 30,
@@ -64,6 +73,7 @@
             "stamina_cost": 10
         },
         {
+            "id": 10,
             "name": "Dust Cloud",
             "type": 1,
             "power": 25,
@@ -71,6 +81,7 @@
             "stamina_cost": 15
         },
         {
+            "id": 11,
             "name": "Mighty Roar",
             "type": 2,
             "accuracy": 95,
@@ -78,6 +89,7 @@
             "effect": {"attack": 1.5}
         },
         {
+            "id": 12,
             "name": "Iron Defense",
             "type": 2,
             "accuracy": 95,
@@ -85,6 +97,7 @@
             "effect": {"defense": 1.5}
         },
         {
+            "id": 13,
             "name": "Endurance Boost",
             "type": 2,
             "accuracy": 95,
@@ -92,6 +105,7 @@
             "effect": {"max_stamina": 1.5}
         },
         {
+            "id": 14,
             "name": "Rapid Recovery",
             "type": 2,
             "accuracy": 85,
@@ -99,6 +113,7 @@
             "effect": {"stamina_recharge": 1.5}
         },
         {
+            "id": 15,
             "name": "Speed Surge",
             "type": 2,
             "accuracy": 95,
@@ -106,6 +121,7 @@
             "effect": {"speed": 1.5}
         },
         {
+            "id": 16,
             "name": "Intimidating Stare",
             "type": 3,
             "accuracy": 80,
@@ -113,6 +129,7 @@
             "effect": {"attack": 0.5}
         },
         {
+            "id": 17,
             "name": "Sand Throw",
             "type": 3,
             "accuracy": 85,
@@ -120,6 +137,7 @@
             "effect": {"defense": 0.5}
         },
         {
+            "id": 18,
             "name": "Fatigue Gas",
             "type": 3,
             "accuracy": 80,
@@ -127,6 +145,7 @@
             "effect": {"max_stamina": 0.5}
         },
         {
+            "id": 19,
             "name": "Energy Drain",
             "type": 3,
             "accuracy": 75,
@@ -134,6 +153,7 @@
             "effect": {"stamina_recharge": 0.5}
         },
         {
+            "id": 20,
             "name": "Mud Splash",
             "type": 3,
             "accuracy": 85,

@@ -76,3 +76,9 @@ class Dino:
         self.speed = self.base_speed
         self.hp = self.base_hp  # Assuming max_hp is the full health of the Dino
 
+    def get_stats(self):
+        stats = [self.team, self.id, self.base_hp, self.base_attack, self.base_defense, self.base_stamina,
+                 self.base_stamina_recharge, self.base_speed]
+        for move in self.moves:
+            stats.append(move.id)
+        return stats
