@@ -74,8 +74,8 @@ def structure_data(battle_data):
 
 
 if __name__ == "__main__":
-    save_battle_data = False  # Toggle to save battle data to a csv for training my model
-    num_battles = 10  # Change the number of battles being run
+    save_battle_data = True  # Toggle to save battle data to a csv for training my model
+    num_battles = 30000  # Change the number of battles being run
     data = run_simulation(num_battles, capture_battle_stats=True)  # Run 100 battle simulations
     structured_data = structure_data(data)
     if save_battle_data:  # Save to CSV

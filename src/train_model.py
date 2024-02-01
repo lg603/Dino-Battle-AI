@@ -1,41 +1,65 @@
 import torch
-from torch.utils.data import DataLoader, random_split
 from torch import nn, optim
-from battle_dataset import BattleDataset
+import matplotlib.pyplot as plt
 from battle_net import BattleNet
 
-# Assuming 'features_tensor' and 'labels_tensor' are already defined
-dataset = BattleDataset(features_tensor, labels_tensor)
 
-# Split the dataset into training and testing sets
-train_size = int(0.8 * len(dataset))
-test_size = len(dataset) - train_size
-train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
+def evaluate(model, test_loader):
+    model.eval()  # Set the model to evaluation mode
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for features, labels in test_loader:
+            outputs = model(features)
+            _, predicted = torch.max(outputs.data, 1)
 
-# Create data loaders
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+            # Ensure labels and predicted are tensors of the same type
+            labels = labels.to(predicted.device).type(predicted.dtype)
 
-# Instantiate the model
-model = BattleNet()
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
 
-# Loss and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+    accuracy = 100 * correct / total
+    return accuracy
 
-# Training loop
-num_epochs = 10  # Define the number of epochs
-for epoch in range(num_epochs):
-    for batch_features, batch_labels in train_loader:
-        # Forward pass
-        outputs = model(batch_features)
-        loss = criterion(outputs, batch_labels)
 
-        # Backward and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+def train(model, train_loader, num_epochs=10):
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-5)
 
-    print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+    # Track loss over epochs
+    epoch_losses = []
 
-# Add code for model evaluation here if needed
+    for epoch in range(num_epochs):
+        model.train()  # Set the model to training mode
+        total_loss = 0
+
+        for batch_features, batch_labels in train_loader:
+            # Forward pass
+            outputs = model(batch_features)
+            l1_lambda = 0.001
+            l1_norm = sum(p.abs().sum() for p in model.parameters())
+
+            loss = criterion(outputs, batch_labels) + l1_lambda * l1_norm  # L1 regularization
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            total_loss += loss.item()
+
+        avg_loss = total_loss / len(train_loader)
+        epoch_losses.append(avg_loss)
+        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
+
+    return epoch_losses
+
+
+def plot_performance(epoch_losses):
+    plt.plot(epoch_losses, label='Training Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Model Training Performance')
+    plt.legend()
+    plt.show()
