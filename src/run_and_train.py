@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset, random_split
 from BattleRunner import run_simulation
 from train_model import train, BattleNet, evaluate, plot_performance
+from sklearn.preprocessing import MinMaxScaler
 
 
 def load_data_to_tensor(file_path):
@@ -18,15 +19,15 @@ def load_data_to_tensor(file_path):
     x_tensor = torch.tensor(x, dtype=torch.float32)
     y_tensor = torch.tensor(y, dtype=torch.long)
 
-    # Assuming x_tensor is your data tensor
-    mean = x_tensor.mean(dim=0, keepdim=True)
-    std = x_tensor.std(dim=0, keepdim=True)
+    # Calculate min and max for each feature
+    x_min = x_tensor.min(dim=0, keepdim=True).values
+    x_max = x_tensor.max(dim=0, keepdim=True).values
 
-    # Avoid division by zero
-    std_replaced = std.where(std != 0, torch.ones_like(std))
+    # Apply min-max scaling
+    x_tensor_normalized = (x_tensor - x_min) / (x_max - x_min)
 
-    # Apply normalization
-    x_tensor_normalized = (x_tensor - mean) / std_replaced
+    # Handle any divisions by zero (if max == min)
+    x_tensor_normalized[x_tensor_normalized != x_tensor_normalized] = 0
 
     # Create a TensorDataset
     dataset = TensorDataset(x_tensor_normalized, y_tensor)
@@ -48,7 +49,7 @@ def load_data_to_tensor(file_path):
 
 def main():
     file_path = "data/battle_data.csv"
-    num_battles = 30000
+    num_battles = 50000
 
     # Check if the data file exists
     if not os.path.exists(file_path):
@@ -63,7 +64,7 @@ def main():
 
     # Train the model
     print("Training model...")
-    epoch_losses = train(model, train_loader, num_epochs=75)
+    epoch_losses = train(model, train_loader, num_epochs=50)
 
     # Evaluate the model
     accuracy = evaluate(model, test_loader)

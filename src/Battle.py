@@ -442,14 +442,23 @@ class Battle:
             winners = "Team 1" if any(d.hp > 0 for d in self.team1) else "Team 2"
             print(f"The battle is over! {winners} wins!")
 
-    # Gather the stats of the dinos before the battle for predictions
+    def get_type_matchups(self, team1, team2):
+        matchups = []
+        for dino1 in team1:
+            for dino2 in team2:
+                effectiveness = self.type_effectiveness(dino1.dino_type, dino2.dino_type)
+                matchups.append(effectiveness)
+        return matchups
+
     def get_pregame_stats(self):
-        team_1_data = []
-        for dino in self.team1:
-            team_1_data += dino.get_stats()
+        team_1_data = [dino.get_stats() for dino in self.team1]
+        team_2_data = [dino.get_stats() for dino in self.team2]
 
-        team_2_data = []
-        for dino in self.team2:
-            team_2_data += dino.get_stats()
+        # Flatten the lists
+        team_1_data = [item for sublist in team_1_data for item in sublist]
+        team_2_data = [item for sublist in team_2_data for item in sublist]
 
-        return team_1_data + team_2_data
+        # Get type matchups
+        type_matchups = self.get_type_matchups(self.team1, self.team2)
+
+        return team_1_data + team_2_data + type_matchups

@@ -81,4 +81,15 @@ class Dino:
                  self.base_stamina_recharge, self.base_speed]
         for move in self.moves:
             stats.append(move.id)
+            stats.append(move.stamina_cost)
+            stats.append(move.accuracy)
+
+            if move.power is not None:
+                stats.append(move.power)
+            if move.effect is not None:
+                if move.move_type == 2:
+                    stats.append(2)
+                if move.move_type == 3:
+                    stats.append(3)
+
         return stats
