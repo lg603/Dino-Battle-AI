@@ -79,3 +79,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""Look into a couple of things:
+ - Adding move pools to each dino to reduce randomness of move assignment. IE, T-Rex can only learn attack boosting, 
+ stamina boosting, and attack moves. Brontosaurus can only learn defensive boosting and attack moves, etc.
+ - Adding more data to the features for my model. I would have to look back into my feature design (and WRITE IT DOWN
+ SOMEWHERE WHAT I AM USING FOR FEATURES, AND WHAT SPOTS THEY ARE IN), and decide what to add. I think I would have to 
+ add other general stats like win-rates for certain dinos, certain team-comps, etc. Also, look into how exactly NNs
+ learn the associations in the data to see if there is a more optimal model for this task.
+ - Try and do some math to figure out if there is an upper limit to how well a model can predict for things with 
+ stochastically determined outcomes.
+"""
+
+
